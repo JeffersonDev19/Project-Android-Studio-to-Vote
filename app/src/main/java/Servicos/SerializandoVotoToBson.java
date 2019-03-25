@@ -4,9 +4,6 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
-import java.util.Date;
-
-import Objeto.Usuario;
 import Objeto.Voto;
 
 public class SerializandoVotoToBson {

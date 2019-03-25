@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
-import Objeto.Usuario;
 import Objeto.Voto;
 
 public class SerializandoVoto {

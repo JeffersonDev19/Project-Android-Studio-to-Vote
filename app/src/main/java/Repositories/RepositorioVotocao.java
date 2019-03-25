@@ -9,9 +9,7 @@ import com.mongodb.MongoClient;
 
 import java.util.List;
 
-import Objeto.Usuario;
 import Objeto.Voto;
-import Servicos.SerializandoUsuarioToBson;
 import Servicos.SerializandoVotoToBson;
 
 public class RepositorioVotocao {

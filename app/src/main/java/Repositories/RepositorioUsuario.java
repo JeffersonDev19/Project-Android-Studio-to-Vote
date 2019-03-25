@@ -10,7 +10,6 @@ import com.mongodb.MongoClient;
 import java.util.List;
 
 import Objeto.Usuario;
-import Servicos.SerializandoUsuario;
 import Servicos.SerializandoUsuarioToBson;
 
 public class RepositorioUsuario {
