@@ -9,7 +9,7 @@
     tools:context=".MainActivity">
 
     <EditText
-        android:id="@+id/txtName"
+        android:id="@+id/txtNome"
         android:layout_width="240dp"
         android:layout_height="33dp"
         android:layout_marginStart="8dp"
@@ -18,8 +18,8 @@
         android:layout_marginBottom="8dp"
         android:background="@drawable/border_rounded"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name:"
+        android:inputType="text"
+        android:text="Nome"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,7 +29,7 @@
     <EditText
         android:id="@+id/txtEmail"
         android:layout_width="240dp"
-        android:layout_height="33dp"
+        android:layout_height="34dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -41,7 +41,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtName"
+        app:layout_constraintTop_toBottomOf="@+id/txtNome"
         app:layout_constraintVertical_bias="0.0" />
 
     <EditText
@@ -72,7 +72,7 @@
         android:layout_marginBottom="8dp"
         android:background="@drawable/border_rounded"
         android:ems="10"
-        android:inputType="numberSigned"
+        android:inputType="number"
         android:text="CPF:"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -108,11 +108,43 @@
         android:layout_marginBottom="8dp"
         android:text="Votação"
         android:textSize="?android:attr/windowTitleSize"
-        app:layout_constraintBottom_toTopOf="@+id/txtName"
+        app:layout_constraintBottom_toTopOf="@+id/txtNome"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:textColor="@color/colorAccent"
         tools:textSize="48sp" />
+
+    <Button
+        android:id="@+id/btnRegistrar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Registrar"
+        android:onClick="btnRegistrar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.792"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtCidade"
+        app:layout_constraintVertical_bias="0.504" />
+
+    <Button
+        android:id="@+id/btnCancelar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Cancelar"
+        android:onClick="btnCancelar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnRegistrar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtCidade" />
 
 </android.support.constraint.ConstraintLayout>

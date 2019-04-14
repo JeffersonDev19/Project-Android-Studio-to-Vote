@@ -27,7 +27,7 @@ public class SerializandoUsuarioToBson {
         usuario.setNome((String)cursor.one().get("nome"));
         usuario.setEmail((String) cursor.one().get("email"));
         usuario.setSenha((String) cursor.one().get("senha"));
-        usuario.setCPF((Integer)cursor.one().get("CPF"));
+        usuario.setCPF((String)cursor.one().get("CPF"));
         usuario.setCidade((String)cursor.one().get("cidade"));
         usuario.setData((Date)cursor.one().get("data"));
         usuario.setPermissao((int)cursor.one().get("permissao"));

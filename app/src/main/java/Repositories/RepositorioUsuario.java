@@ -1,5 +1,7 @@
 package Repositories;
 
+import android.text.Editable;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -18,39 +20,49 @@ public class RepositorioUsuario {
     DB bancoVotacao;
     DBCollection colecaoUsuario;
 
-    public RepositorioUsuario(){
-        if(mongoClient == null) {
+    public RepositorioUsuario() {
+        if (mongoClient == null) {
             this.mongoClient = ConnectionFactory.getInstance();
-            this.bancoVotacao = mongoClient.getDB("nome do banco");
+            this.bancoVotacao = mongoClient.getDB("appVote");
             this.colecaoUsuario = bancoVotacao.getCollection("Usuario");
         }
     }
 
-    public void SalvarUsuario(Usuario usuario){
+    public void SalvarUsuario(Usuario usuario) {
         DBObject objetoSalvo = SerializandoUsuarioToBson.toDBObject(usuario);
         colecaoUsuario.insert(objetoSalvo);
     }
 
-    public List<Usuario> getTodosUsuarios(){
+    public List<Usuario> getTodosUsuarios() {
         List<Usuario> listaUsuario = null;
-        for(int i = 0; i < colecaoUsuario.count(); i++){
+        for (int i = 0; i < colecaoUsuario.count(); i++) {
             listaUsuario.add(SerializandoUsuarioToBson.toJavaObject(this.colecaoUsuario.find()));
         }
         return listaUsuario;
     }
 
-    public Usuario getUsuario(String ID){
+    public boolean existeUsuario(String ID, String senha){
+        List<Usuario> listaUsuario = this.getTodosUsuarios();
+        for(Usuario usuario : listaUsuario){
+            if(usuario.getID() == ID && usuario.getSenha() == senha){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Usuario getUsuario(String ID) {
         DBObject query = new BasicDBObject("_id", ID);
         DBCursor cursor = colecaoUsuario.find(query);
         return SerializandoUsuarioToBson.toJavaObject(cursor);
     }
 
-    public void deletaUsuario(Usuario usuario){
+    public void deletaUsuario(Usuario usuario) {
         DBObject query = SerializandoUsuarioToBson.toDBObject(usuario);
         colecaoUsuario.remove(query);
     }
 
-    public void atualizaUsuario(Usuario usuario){
+    public void atualizaUsuario(Usuario usuario) {
         Usuario buscador = getUsuario(usuario.getID());
         DBObject querySelector = SerializandoUsuarioToBson.toDBObject(usuario);
         DBObject query = SerializandoUsuarioToBson.toDBObject(usuario);

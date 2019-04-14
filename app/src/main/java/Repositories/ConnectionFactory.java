@@ -9,7 +9,7 @@ public class ConnectionFactory {
 
     public static MongoClient getInstance(){
         try {
-            return new MongoClient(new MongoClientURI("mongo"));
+            return new MongoClient(new MongoClientURI("mongodb://admin:1234@appvote-d26la.mongodb.net/test"));
         } catch (UnknownHostException e) {
             System.out.println("Excessão de conexão detectada na execução");
             return null;

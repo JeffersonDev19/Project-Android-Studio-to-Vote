@@ -21,9 +21,9 @@ public class SerializandoVotoToBson {
         Voto voto = new Voto();
         voto.setID((String)cursor.one().get("_id"));
         voto.setID_Usuario((String)cursor.one().get("id_usuario"));
-        voto.setChapaPresidente((Integer)cursor.one().get("presidente"));
-        voto.setChapaGovernador((Integer)cursor.one().get("governador"));
-        voto.setChapaDeputado((Integer)cursor.one().get("deputado"));
+        voto.setChapaPresidente((String)cursor.one().get("presidente"));
+        voto.setChapaGovernador((String)cursor.one().get("governador"));
+        voto.setChapaDeputado((String)cursor.one().get("deputado"));
         return voto;
     }
 }

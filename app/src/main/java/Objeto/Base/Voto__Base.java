@@ -6,9 +6,9 @@ import java.util.Date;
 public class Voto__Base implements Serializable {
 
     protected String ID;
-    protected Integer chapaPresidente;
-    protected Integer chapaGovernador;
-    protected Integer chapaDeputado;
+    protected String chapaPresidente;
+    protected String chapaGovernador;
+    protected String chapaDeputado;
     protected String ID_Usuario;
     protected Date data;
 
@@ -20,27 +20,27 @@ public class Voto__Base implements Serializable {
         this.ID = ID;
     }
 
-    public Integer getChapaPresidente() {
+    public String getChapaPresidente() {
         return chapaPresidente;
     }
 
-    public void setChapaPresidente(Integer chapaPresidente) {
+    public void setChapaPresidente(String chapaPresidente) {
         this.chapaPresidente = chapaPresidente;
     }
 
-    public Integer getChapaGovernador() {
+    public String getChapaGovernador() {
         return chapaGovernador;
     }
 
-    public void setChapaGovernador(Integer chapaGovernador) {
+    public void setChapaGovernador(String chapaGovernador) {
         this.chapaGovernador = chapaGovernador;
     }
 
-    public Integer getChapaDeputado() {
+    public String getChapaDeputado() {
         return chapaDeputado;
     }
 
-    public void setChapaDeputado(Integer chapaDeputado) {
+    public void setChapaDeputado(String chapaDeputado) {
         this.chapaDeputado = chapaDeputado;
     }
 

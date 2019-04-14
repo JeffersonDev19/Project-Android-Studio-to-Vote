@@ -21,17 +21,27 @@ public class RepositorioVotocao {
     public RepositorioVotocao(){
         if(mongoClient == null) {
             this.mongoClient = ConnectionFactory.getInstance();
-            this.bancoVotacao = mongoClient.getDB("nome do banco");
-            this.colecaoVotos = bancoVotacao.getCollection("Usuario");
+            this.bancoVotacao = mongoClient.getDB("appVote");
+            this.colecaoVotos = bancoVotacao.getCollection("Voto");
         }
     }
 
-    public void SalvarUsuario(Voto voto){
+    public boolean isVotou(Voto voto){
+        List<Voto> listaVoto = getTodosVotos();
+        for(Voto votoConf : listaVoto){
+            if(voto.getID_Usuario() == votoConf.getID_Usuario() && voto.getID() == votoConf.getID()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void SalvarVoto(Voto voto){
         DBObject objetoSalvo = SerializandoVotoToBson.toDBObject(voto);
         colecaoVotos.insert(objetoSalvo);
     }
 
-    public List<Voto> getTodosUsuarios(){
+    public List<Voto> getTodosVotos(){
         List<Voto> listaVotos = null;
         for(int i = 0; i < colecaoVotos.count(); i++){
             listaVotos.add(SerializandoVotoToBson.toJavaObject(this.colecaoVotos.find()));
@@ -45,15 +55,4 @@ public class RepositorioVotocao {
         return SerializandoVotoToBson.toJavaObject(cursor);
     }
 
-    public void deletaUsuario(Voto voto){
-        DBObject query = SerializandoVotoToBson.toDBObject(voto);
-        colecaoVotos.remove(query);
-    }
-
-    public void atualizaUsuario(Voto voto){
-        Voto buscador = getVoto(voto.getID());
-        DBObject querySelector = SerializandoVotoToBson.toDBObject(voto);
-        DBObject query = SerializandoVotoToBson.toDBObject(voto);
-        colecaoVotos.update(querySelector, query);
-    }
 }

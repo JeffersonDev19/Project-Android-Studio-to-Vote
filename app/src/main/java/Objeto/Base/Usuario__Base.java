@@ -1,5 +1,7 @@
 package Objeto.Base;
 
+import android.text.Editable;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -9,7 +11,7 @@ public class Usuario__Base implements Serializable {
     protected String nome;
     protected String email;
     protected String senha;
-    protected Integer CPF;
+    protected String CPF;
     protected String cidade;
     protected Date data;
     protected int permissao;
@@ -30,11 +32,11 @@ public class Usuario__Base implements Serializable {
         this.nome = nome;
     }
 
-    public Integer getCPF() {
+    public String getCPF() {
         return CPF;
     }
 
-    public void setCPF(Integer CPF) {
+    public void setCPF(String CPF) {
         this.CPF = CPF;
     }
 
