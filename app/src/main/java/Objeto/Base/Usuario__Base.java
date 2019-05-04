@@ -13,7 +13,7 @@ public class Usuario__Base implements Serializable {
     protected String senha;
     protected String CPF;
     protected String cidade;
-    protected Date data;
+    protected String data;
     protected int permissao;
 
     public String getID() {
@@ -48,11 +48,11 @@ public class Usuario__Base implements Serializable {
         this.cidade = cidade;
     }
 
-    public Date getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(String data) {
         this.data = data;
     }
 

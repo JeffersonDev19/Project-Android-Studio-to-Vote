@@ -1,23 +1,22 @@
 package Controladores;
 
-import android.widget.Button;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.view.View;
 import android.widget.EditText;
 
-import java.util.List;
+import com.example.jeffersongarcia.appvote.R;
+
+import java.text.ParseException;
 
 import Objeto.Usuario;
 import Repositories.RepositorioUsuario;
 
 public class ControladorLogin {
 
-    public static Usuario Login(EditText txtNome, EditText txtSenha){
-        RepositorioUsuario repUsu = new RepositorioUsuario();
-        List<Usuario> listaUsuario = repUsu.getTodosUsuarios();
-        for(Usuario usuario : listaUsuario){
-            if(usuario.getNome().equals(txtNome) && usuario.getSenha().equals(txtSenha)){
-                return repUsu.getUsuario(txtNome.getText().toString());
-            }
-        }
-        return null;
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static Usuario Login(View view, Usuario usuario) throws ParseException {
+        RepositorioUsuario repUsu = new RepositorioUsuario(view.getContext());
+        return repUsu.getLogin(usuario);
     }
 }

@@ -1,58 +1,41 @@
 package Repositories;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
+
+import android.content.ContentValues;
+import android.content.Context;
 
 import java.util.List;
 
+import Objeto.Usuario;
 import Objeto.Voto;
-import Servicos.SerializandoVotoToBson;
 
 public class RepositorioVotocao {
 
-    MongoClient mongoClient;
-    DB bancoVotacao;
-    DBCollection colecaoVotos;
+    private final String TABLE_VOTOS = "Votacao";
+    private DbGateway gw;
 
-    public RepositorioVotocao(){
-        if(mongoClient == null) {
-            this.mongoClient = ConnectionFactory.getInstance();
-            this.bancoVotacao = mongoClient.getDB("appVote");
-            this.colecaoVotos = bancoVotacao.getCollection("Voto");
-        }
+    public RepositorioVotocao(Context ctx) {
+        gw = DbGateway.getInstance(ctx);
+    }
+    
+    public void salvar(Voto voto){
+
+        ContentValues cv = new ContentValues();
+
+        cv.put("ID", voto.getID());
+        cv.put("chapaPresidente", voto.getChapaPresidente());
+        cv.put("chapaGovernador", voto.getChapaGovernador());
+        cv.put("chapaDeputado", voto.getChapaDeputado());
+        cv.put("ID_Usuario", voto.getID_Usuario());
+        cv.put("data", voto.getData().toString());
     }
 
-    public boolean isVotou(Voto voto){
-        List<Voto> listaVoto = getTodosVotos();
-        for(Voto votoConf : listaVoto){
-            if(voto.getID_Usuario() == votoConf.getID_Usuario() && voto.getID() == votoConf.getID()){
-                return true;
-            }
-        }
-        return false;
+    public List<Voto> getTodos() {
+        return (List<Voto>) gw.getDatabase().rawQuery("Select * From " + TABLE_VOTOS, null);
     }
 
-    public void SalvarVoto(Voto voto){
-        DBObject objetoSalvo = SerializandoVotoToBson.toDBObject(voto);
-        colecaoVotos.insert(objetoSalvo);
-    }
-
-    public List<Voto> getTodosVotos(){
-        List<Voto> listaVotos = null;
-        for(int i = 0; i < colecaoVotos.count(); i++){
-            listaVotos.add(SerializandoVotoToBson.toJavaObject(this.colecaoVotos.find()));
-        }
-        return listaVotos;
-    }
-
-    public Voto getVoto(String ID){
-        DBObject query = new BasicDBObject("_id", ID);
-        DBCursor cursor = colecaoVotos.find(query);
-        return SerializandoVotoToBson.toJavaObject(cursor);
+    public Voto isVotou(Voto voto){
+        return (Voto) gw.getDatabase().rawQuery("select * from " + TABLE_VOTOS + " where ID_Usuario = " + voto.getID_Usuario(), null);
     }
 
 }

@@ -1,71 +1,107 @@
 package Repositories;
 
-import android.text.Editable;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.icu.text.DateFormat;
+import android.icu.text.SimpleDateFormat;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
-
+import java.text.ParseException;
 import java.util.List;
 
 import Objeto.Usuario;
-import Servicos.SerializandoUsuarioToBson;
 
 public class RepositorioUsuario {
 
-    MongoClient mongoClient;
-    DB bancoVotacao;
-    DBCollection colecaoUsuario;
+    private final String TABLE_USUARIOS = "Usuario";
+    private DbGateway gw;
 
-    public RepositorioUsuario() {
-        if (mongoClient == null) {
-            this.mongoClient = ConnectionFactory.getInstance();
-            this.bancoVotacao = mongoClient.getDB("appVote");
-            this.colecaoUsuario = bancoVotacao.getCollection("Usuario");
+    public RepositorioUsuario(Context ctx) {
+        gw = DbGateway.getInstance(ctx);
+    }
+
+    public void salvar(Usuario usuario) {
+        ContentValues cv = new ContentValues();
+        cv.put("nome", usuario.getNome());
+        cv.put("email", usuario.getEmail());
+        cv.put("senha", usuario.getSenha());
+        cv.put("CPF", usuario.getCPF());
+        cv.put("cidade", usuario.getCidade());
+        cv.put("data", usuario.getData().toString());
+        cv.put("permissao", usuario.getPermissao());
+
+        gw.getDatabase().insert(TABLE_USUARIOS, null, cv);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public Usuario isExiste(Usuario usuario) throws ParseException {
+        String sql = "select * from " + TABLE_USUARIOS + " where nome = ? and email = ?";
+        Cursor cursor = gw.getDatabase().rawQuery(sql, new String[]{usuario.getNome(), usuario.getEmail()});
+        usuario = preparaUsuario(cursor);
+        if(usuario.getID() != null) {
+            return usuario;
+        } else {
+            return null;
         }
     }
 
-    public void SalvarUsuario(Usuario usuario) {
-        DBObject objetoSalvo = SerializandoUsuarioToBson.toDBObject(usuario);
-        colecaoUsuario.insert(objetoSalvo);
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public Usuario getLogin(Usuario usuario) throws ParseException {
+        String sql2 = "select * from " + TABLE_USUARIOS;
+        Cursor cursor2 = gw.getDatabase().rawQuery(sql2, null);
+        usuario = preparaUsuario(cursor2);
+        return usuario;
     }
 
-    public List<Usuario> getTodosUsuarios() {
-        List<Usuario> listaUsuario = null;
-        for (int i = 0; i < colecaoUsuario.count(); i++) {
-            listaUsuario.add(SerializandoUsuarioToBson.toJavaObject(this.colecaoUsuario.find()));
+    public void excluir(Usuario usuario) {
+        gw.getDatabase().delete(TABLE_USUARIOS, "ID" + "='" + usuario.getID() + "'", null);
+    }
+
+    public void atualizar(Usuario usuario) {
+        ContentValues cv = new ContentValues();
+        cv.put("nome", usuario.getNome());
+        cv.put("email", usuario.getEmail());
+        cv.put("senha", usuario.getSenha());
+        cv.put("CPF", usuario.getCPF());
+        cv.put("cidade", usuario.getCidade());
+        cv.put("data", usuario.getData().toString());
+
+        gw.getDatabase().update(TABLE_USUARIOS, cv, "where ID =" + usuario.getID(), null);
+    }
+
+    public Usuario get(Usuario usuario) {
+        ContentValues cv = new ContentValues();
+        cv.put("nome", usuario.getNome());
+        cv.put("email", usuario.getEmail());
+        cv.put("senha", usuario.getSenha());
+        cv.put("CPF", usuario.getCPF());
+        cv.put("cidade", usuario.getCidade());
+        cv.put("data", usuario.getData().toString());
+
+        return (Usuario) gw.getDatabase().rawQuery("Select * From " + TABLE_USUARIOS + " where ID = " + usuario.getID(), null);
+    }
+
+    public List<Usuario> getTodos() {
+        return (List<Usuario>) gw.getDatabase().rawQuery("Select * From " + TABLE_USUARIOS, null);
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public Usuario preparaUsuario(Cursor cursor) throws ParseException {
+        Usuario usuario = new Usuario();
+
+        while(cursor.moveToNext()){
+            usuario.setNome(cursor.getString(cursor.getColumnIndex("nome")));
+            usuario.setEmail(cursor.getString(cursor.getColumnIndex("email")));
+            usuario.setSenha(cursor.getString(cursor.getColumnIndex("senha")));
+            usuario.setCPF(cursor.getString(cursor.getColumnIndex("CPF")));
+            usuario.setCidade(cursor.getString(cursor.getColumnIndex("cidade")));
+            usuario.setData(cursor.getString(cursor.getColumnIndex("data")));
+            usuario.setPermissao(Integer.parseInt(cursor.getString(cursor.getColumnIndex("permissao"))));
         }
-        return listaUsuario;
-    }
-
-    public boolean existeUsuario(String ID, String senha){
-        List<Usuario> listaUsuario = this.getTodosUsuarios();
-        for(Usuario usuario : listaUsuario){
-            if(usuario.getID() == ID && usuario.getSenha() == senha){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public Usuario getUsuario(String ID) {
-        DBObject query = new BasicDBObject("_id", ID);
-        DBCursor cursor = colecaoUsuario.find(query);
-        return SerializandoUsuarioToBson.toJavaObject(cursor);
-    }
-
-    public void deletaUsuario(Usuario usuario) {
-        DBObject query = SerializandoUsuarioToBson.toDBObject(usuario);
-        colecaoUsuario.remove(query);
-    }
-
-    public void atualizaUsuario(Usuario usuario) {
-        Usuario buscador = getUsuario(usuario.getID());
-        DBObject querySelector = SerializandoUsuarioToBson.toDBObject(usuario);
-        DBObject query = SerializandoUsuarioToBson.toDBObject(usuario);
-        colecaoUsuario.update(querySelector, query);
+        cursor.close();
+        return usuario;
     }
 }
